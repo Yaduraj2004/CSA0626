@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main() {
+    char str[100];
+    int length = 0;
+
+    // Input the string
+    printf("Enter a string: ");
+    scanf("%s", str);  // Read input without spaces
+
+    // Calculate the length of the string
+    while (str[length] != '\0') {
+        length++;
+    }
+
+    // Output the length of the string
+    printf("Length of the string is: %d\n", length);
+
+    return 0;
+}
