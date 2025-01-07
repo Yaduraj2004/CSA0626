@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main() {
+    int n;
+
+    // Input the number of rows
+    printf("Enter the value of n: ");
+    scanf("%d", &n);
+
+    // Loop to print the pattern
+    for (int i = 1; i <= n; i++) {
+        // Loop to print spaces
+        for (int j = 1; j <= n - i; j++) {
+            printf(" ");
+        }
+
+        // Loop to print numbers
+        for (int j = 1; j <= i; j++) {
+            printf("%d ", j);
+        }
+
+        // Move to the next line
+        printf("\n");
+    }
+
+    return 0;
+}
