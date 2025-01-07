@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX 100
+
+// Function to calculate the sum of probabilities for a given range [i, j]
+int sumProbabilities(int prob[], int i, int j) {
+    int sum = 0;
+    for (int k = i; k <= j; k++) {
+        sum += prob[k];
+    }
+    return sum;
+}
+
+// Function to find the optimal binary search tree cost
+int optimalBST(int keys[], int prob[], int n) {
+    // e[i][j] will store the minimum cost for keys[i..j]
+    int e[n+1][n+1]; 
+    // root[i][j] will store the root of the optimal BST for keys[i..j]
+    int root[n+1][n+1];
+
+    // Base case: when there is only one key, the cost is just its probability
+    for (int i = 1; i <= n; i++) {
+        e[i][i] = prob[i-1];
+        root[i][i] = i;
+    }
+
+    // Fill the e[][] and root[][] tables
+    for (int length = 2; length <= n; length++) {
+        for (int i = 1; i <= n - length + 1; i++) {
+            int j = i + length - 1;
+            e[i][j] = INT_MAX;
+            int totalProb = sumProbabilities(prob, i-1, j-1);
+            
+            for (int r = i; r <= j; r++) {
+                int cost = e[i][r-1] + e[r+1][j] + totalProb;
+                if (cost < e[i][j]) {
+                    e[i][j] = cost;
+                    root[i][j] = r;
+                }
+            }
+        }
+    }
+
+    // The optimal cost is stored in e[1][n]
+    return e[1][n];
+}
+
+int main() {
+    int n;
+    printf("Enter the number of keys: ");
+    scanf("%d", &n);
+
+    int keys[n];
+    int prob[n];
+
+    printf("Enter the keys: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &keys[i]);
+    }
+
+    printf("Enter the probabilities for each key: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &prob[i]);
+    }
+
+    int result = optimalBST(keys, prob, n);
+    printf("Minimum cost of the Optimal Binary Search Tree: %d\n", result);
+
+    return 0;
+}
