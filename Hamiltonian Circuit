@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define V 5 // Number of vertices
+
+int path[V]; // Path array to store Hamiltonian circuit
+
+bool isSafe(int v, int graph[V][V], int pos) {
+    // Check adjacency and if vertex is already included
+    if (graph[path[pos - 1]][v] == 0) return false;
+    for (int i = 0; i < pos; i++)
+        if (path[i] == v) return false;
+    return true;
+}
+
+bool hamiltonianUtil(int graph[V][V], int pos) {
+    if (pos == V) 
+        return graph[path[pos - 1]][path[0]] == 1; // Check if circuit closes
+
+    for (int v = 1; v < V; v++) {
+        if (isSafe(v, graph, pos)) {
+            path[pos] = v; // Add vertex to path
+            if (hamiltonianUtil(graph, pos + 1)) return true;
+            path[pos] = -1; // Backtrack
+        }
+    }
+    return false;
+}
+
+void hamiltonianCycle(int graph[V][V]) {
+    for (int i = 0; i < V; i++) path[i] = -1; // Initialize path
+    path[0] = 0; // Start at vertex 0
+
+    if (!hamiltonianUtil(graph, 1)) {
+        printf("No Hamiltonian Circuit exists\n");
+        return;
+    }
+
+    printf("Hamiltonian Circuit: ");
+    for (int i = 0; i < V; i++) printf("%d ", path[i]);
+    printf("%d\n", path[0]); // Complete the circuit
+}
+
+int main() {
+    int graph[V][V] = {
+        {0, 1, 0, 1, 0},
+        {1, 0, 1, 1, 1},
+        {0, 1, 0, 0, 1},
+        {1, 1, 0, 0, 1},
+        {0, 1, 1, 1, 0}
+    };
+    hamiltonianCycle(graph);
+    return 0;
+}
