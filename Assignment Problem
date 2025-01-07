@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <limits.h>
+#include <stdbool.h>
+
+#define N 4 // Number of agents/tasks
+
+int costMatrix[N][N] = {
+    {9, 2, 7, 8},
+    {6, 4, 3, 7},
+    {5, 8, 1, 8},
+    {7, 6, 9, 4}
+};
+
+int minCost = INT_MAX; // To track the minimum cost
+int result[N];         // To store the best assignment
+
+// Function to find the minimum value in a row
+int findMinInRow(int matrix[N][N], bool assigned[N], int row) {
+    int min = INT_MAX;
+    for (int j = 0; j < N; j++) {
+        if (!assigned[j] && matrix[row][j] < min) {
+            min = matrix[row][j];
+        }
+    }
+    return min;
+}
+
+// Recursive function to solve the problem using Branch and Bound
+void branchAndBound(int level, int cost, bool assigned[N], int assignment[N]) {
+    // Base case: All tasks are assigned
+    if (level == N) {
+        if (cost < minCost) {
+            minCost = cost;
+            for (int i = 0; i < N; i++) {
+                result[i] = assignment[i];
+            }
+        }
+        return;
+    }
+
+    // Try assigning the current task to all agents
+    for (int i = 0; i < N; i++) {
+        if (!assigned[i]) { // If agent is not already assigned
+            assigned[i] = true;             // Assign agent
+            assignment[level] = i;          // Record assignment
+            int newCost = cost + costMatrix[level][i]; // Update cost
+
+            // Call recursively for the next level
+            branchAndBound(level + 1, newCost, assigned, assignment);
+
+            assigned[i] = false; // Backtrack
+        }
+    }
+}
+
+int main() {
+    bool assigned[N] = {false}; // Track assigned agents
+    int assignment[N];          // Store current assignments
+
+    // Solve using Branch and Bound
+    branchAndBound(0, 0, assigned, assignment);
+
+    // Output the results
+    printf("Minimum Cost: %d\n", minCost);
+    printf("Task Assignments:\n");
+    for (int i = 0; i < N; i++) {
+        printf("Task %d -> Agent %d\n", i, result[i]);
+    }
+
+    return 0;
+}
