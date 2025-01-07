@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_CONTAINERS 10
+#define MAX_ITEMS 10
+
+// Function to find the next available container index
+int findAvailableContainer(int containers[], int numContainers) {
+    for (int i = 0; i < numContainers; i++) {
+        if (containers[i] == -1) {
+            return i;
+        }
+    }
+    return -1; // No available containers
+}
+
+// Function to load items into containers
+void loadContainers(int items[], int itemCount, int containerCapacity, int containers[], int numContainers) {
+    int currentContainer = 0;
+    for (int i = 0; i < itemCount; i++) {
+        bool loaded = false;
+        for (int j = 0; j < numContainers; j++) {
+            if (containers[j] + items[i] <= containerCapacity) {
+                containers[j] += items[i]; // Load item into container
+                loaded = true;
+                break;
+            }
+        }
+
+        if (!loaded) { // If the item was not loaded, add a new container
+            currentContainer = findAvailableContainer(containers, numContainers);
+            if (currentContainer != -1) {
+                containers[currentContainer] = items[i]; // Start loading into a new container
+            } else {
+                printf("Error: No available containers.\n");
+                return;
+            }
+        }
+    }
+
+    // Display the loaded containers
+    printf("Container loading result:\n");
+    for (int i = 0; i < numContainers; i++) {
+        if (containers[i] != -1) {
+            printf("Container %d: %d units loaded\n", i + 1, containers[i]);
+        }
+    }
+}
+
+int main() {
+    int numContainers, containerCapacity, itemCount;
+    int items[MAX_ITEMS];
+    int containers[MAX_CONTAINERS] = {-1}; // Initialize all containers as empty
+
+    // Get user input
+    printf("Enter the number of containers: ");
+    scanf("%d", &numContainers);
+
+    printf("Enter the capacity of each container: ");
+    scanf("%d", &containerCapacity);
+
+    printf("Enter the number of items: ");
+    scanf("%d", &itemCount);
+
+    printf("Enter the sizes of the items:\n");
+    for (int i = 0; i < itemCount; i++) {
+        scanf("%d", &items[i]);
+    }
+
+    // Load the containers
+    loadContainers(items, itemCount, containerCapacity, containers, numContainers);
+
+    return 0;
+}
