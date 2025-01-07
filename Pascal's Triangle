@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+// Function to calculate factorial
+long factorial(int n) {
+    long fact = 1;
+    for (int i = 1; i <= n; i++) {
+        fact *= i;
+    }
+    return fact;
+}
+
+// Function to calculate Binomial Coefficient (nCr)
+long binomialCoeff(int n, int r) {
+    return factorial(n) / (factorial(r) * factorial(n - r));
+}
+
+// Function to print Pascal's Triangle
+void printPascal(int n) {
+    for (int line = 0; line < n; line++) {
+        // Print leading spaces for formatting
+        for (int space = 0; space < n - line - 1; space++) {
+            printf(" ");
+        }
+
+        // Print values in the current row
+        for (int i = 0; i <= line; i++) {
+            printf("%ld ", binomialCoeff(line, i));
+        }
+
+        // Move to the next line
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+
+    // Input the number of rows for Pascal's Triangle
+    printf("Enter the number of rows: ");
+    scanf("%d", &n);
+
+    // Print Pascal's Triangle
+    printPascal(n);
+
+    return 0;
+}
