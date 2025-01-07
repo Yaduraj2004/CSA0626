@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100  // Define the maximum size of the list
+
+// Function to print the minimum and maximum values for each index in the list
+void printMinMax(int list[], int size) {
+    for (int i = 0; i < size; i++) {
+        int min = list[i];
+        int max = list[i];
+        
+        // Find the minimum and maximum for the sequence ending at index i
+        for (int j = 0; j <= i; j++) {
+            if (list[j] < min) {
+                min = list[j];
+            }
+            if (list[j] > max) {
+                max = list[j];
+            }
+        }
+        
+        // Print the minimum and maximum values for the current sequence
+        printf("For index %d, Min = %d, Max = %d\n", i, min, max);
+    }
+}
+
+int main() {
+    int list[MAX_SIZE];
+    int size;
+
+    // Input the size of the list
+    printf("Enter the number of elements in the list: ");
+    scanf("%d", &size);
+
+    // Input the elements of the list
+    printf("Enter the elements of the list:\n");
+    for (int i = 0; i < size; i++) {
+        scanf("%d", &list[i]);
+    }
+
+    // Call the function to print the minimum and maximum values
+    printMinMax(list, size);
+
+    return 0;
+}
